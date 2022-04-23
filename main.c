@@ -3,14 +3,34 @@
 #include <stdlib.h>
 #include <string.h>
 
+/** If compiling on Windows, compile these functions */
+#ifdef _WIN32
+
+#define INPUT_BUFFER_SIZE 2048
+static char buffer[INPUT_BUFFER_SIZE];
+
+/** Fake readline function */
+char *readline(char *prompt) {
+  fputs(prompt, stdout);
+  fgets(buffer, INPUT_BUFFER_SIZE, stdin);
+  char *cpy = malloc(strlen(buffer) + 1);
+  strcpy(cpy, buffer);
+  cpy[strlen(cpy) - 1] = '\0';
+  return cpy;
+}
+
+/** Fake address function */
+void add_history(char *unused) {}
+
+/** Otherwise include editline headers */
+#else
 #include <editline/history.h>
 #include <editline/readline.h>
+#endif
 
 static char *input;
 
 static bool is_running(void);
-
-#define INPUT_BUFFER_SIZE 2048
 
 int main(int argc, char *argv[]) {
 
