@@ -44,7 +44,7 @@ int main(int argc, char *argv[]) {
   mpca_lang(MPCA_LANG_DEFAULT, "\
     number   : /(-?[0-9]+)(.[0-9]+)*/ ;                                     \
     operator : '+' | '-' | '*' | '/' | '%';                          \
-    expr     : <number> | '(' <operator> <expr> <expr>+ ')' ;  \
+    expr     : <number> | '(' <operator> <expr>+ ')' ;  \
     clispy    : /^/ <expr> /$/ ; \
   ",
             Number, Operator, Expr, Clispy);
@@ -69,6 +69,7 @@ int main(int argc, char *argv[]) {
     if (mpc_parse("<stdin>", input, Clispy, &r)) {
       /* On Success Print the AST */
       mpc_ast_print(r.output);
+
       mpc_ast_delete(r.output);
     } else {
       /* Otherwise Print the Error */
